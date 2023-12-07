@@ -46,11 +46,21 @@ public class Application {
         Order order4 = new Order("start", LocalDate.now(), cart4, user4);
 
         List<Order> orders = Arrays.asList(order1, order2, order3, order4);
+        List<Product> products = Arrays.asList(car, baby, phone, book5, car3, baby2, baby3, book4, car2);
 
         System.out.println("------------------- Esercizio 1 -----------------");
 
         Map<Customer, List<Order>> orderCustomerMap = orders.stream().collect(Collectors.groupingBy(Order::getCustomer));
         orderCustomerMap.forEach(((customer, ordersList) -> System.out.println(customer + " - " + ordersList)));
+
+        System.out.println("------------------- Esercizio 2 -----------------");
+
+        Map<Customer, Double> customersTotalShop = orders.stream().collect(Collectors.groupingBy(Order::getCustomer, Collectors.summingDouble(order -> order.getProducts().stream().mapToDouble(Product::getPrice).sum())));
+        customersTotalShop.forEach(((customer, total) -> System.out.println(customer + " - " + total)));
+
+        System.out.println("------------------- Esercizio 3 -----------------");
+        List<Product> moreExpansive = products.stream().sorted(Comparator.comparingDouble(Product::getPrice).reversed()).toList();
+        moreExpansive.forEach(product -> System.out.println(product.getName() + " - " + product.getPrice()));
     }
 
 }
